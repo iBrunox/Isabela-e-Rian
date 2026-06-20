@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#2C2520" />
+  <title>Isabela & Rian</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:   #F7F4EF;
+      --warm:    #EDE7DC;
+      --gold:    #B89A6A;
+      --gold-lt: #D4B98A;
+      --ink:     #2C2520;
+      --mid:     #7A6E65;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════
+       HERO — foto full-screen
+    ══════════════════════════ */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100svh;
+      min-height: 600px;
+      overflow: hidden;
+    }
+
+    .hero__img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    /* gradiente escuro no bottom pra legibilidade */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(44,37,32,0.08) 0%,
+        rgba(44,37,32,0.0)  40%,
+        rgba(44,37,32,0.65) 100%
+      );
+      pointer-events: none;
+    }
+
+    .hero__content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
+      padding: 2.5rem 1.8rem calc(2.5rem + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero__eyebrow {
+      font-size: 0.62rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      margin-bottom: 0.9rem;
+    }
+
+    .hero__names {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(2.8rem, 12vw, 5rem);
+      line-height: 1.05;
+      color: #fff;
+    }
+
+    .hero__names em {
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+
+    .hero__amp {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.4rem, 6vw, 2.4rem);
+      color: rgba(255,255,255,0.6);
+      margin: 0.15rem 0;
+      display: block;
+    }
+
+    .hero__line {
+      width: 36px;
+      height: 1px;
+      background: var(--gold);
+      margin: 1.4rem auto 1.2rem;
+    }
+
+    .hero__phrase {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1rem, 4.5vw, 1.2rem);
+      color: rgba(255,255,255,0.82);
+      line-height: 1.6;
+      max-width: 320px;
+      margin-bottom: 2rem;
+    }
+
+    /* ══════════════════════════
+       BOTÃO PRINCIPAL
+    ══════════════════════════ */
+    .btn-upload {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      max-width: 320px;
+      background: var(--gold);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1.05rem 1.5rem;
+      border-radius: 2px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.2s, transform 0.15s;
+      touch-action: manipulation;
+    }
+
+    .btn-upload:active {
+      background: var(--ink);
+      transform: scale(0.98);
+    }
+
+    /* ══════════════════════════
+       GALERIA — scroll horizontal
+    ══════════════════════════ */
+    .gallery-section {
+      background: var(--warm);
+      padding: 3.5rem 0 3.5rem;
+    }
+
+    .section-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+      margin-bottom: 1.6rem;
+    }
+
+    .gallery-scroll {
+      display: flex;
+      gap: 10px;
+      padding: 0 1.5rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .gallery-scroll::-webkit-scrollbar { display: none; }
+
+    .gallery-card {
+      flex: 0 0 72vw;
+      max-width: 300px;
+      aspect-ratio: 2/3;
+      border-radius: 3px;
+      overflow: hidden;
+      scroll-snap-align: start;
+      background: var(--ink);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+
+    .gallery-dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 1.2rem;
+      padding: 0 1rem;
+    }
+
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.3;
+      transition: opacity 0.3s;
+      flex-shrink: 0;
+    }
+    .dot.active { opacity: 1; }
+
+    /* ══════════════════════════
+       CTA SECTION
+    ══════════════════════════ */
+    .cta-section {
+      background: var(--ink);
+      padding: 4rem 1.8rem calc(4rem + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .cta-section .section-label {
+      color: var(--gold-lt);
+    }
+
+    .cta__headline {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1.8rem, 8vw, 2.8rem);
+      line-height: 1.2;
+      color: var(--cream);
+      max-width: 340px;
+      margin-bottom: 1.2rem;
+    }
+
+    .cta__sub {
+      font-size: clamp(0.82rem, 3.5vw, 0.95rem);
+      font-weight: 300;
+      color: var(--gold-lt);
+      line-height: 1.8;
+      max-width: 340px;
+      margin-bottom: 2.4rem;
+    }
+
+    .btn-outline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      max-width: 320px;
+      border: 1px solid var(--gold);
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 1.05rem 1.5rem;
+      border-radius: 2px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.2s;
+      touch-action: manipulation;
+    }
+
+    .btn-outline:active { background: var(--gold); }
+
+    /* ══════════════════════════
+       FOOTER
+    ══════════════════════════ */
+    footer {
+      background: var(--cream);
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      color: var(--mid);
+    }
+
+    footer em {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--gold);
+    }
+
+    /* ══════════════════════════
+       FADE-IN
+    ══════════════════════════ */
+    .fade {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade.in { opacity: 1; transform: none; }
+
+    /* ══════════════════════════
+       DESKTOP — layout lado a lado
+    ══════════════════════════ */
+    @media (min-width: 768px) {
+      /* hero: foto à esquerda, texto à direita */
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 100svh;
+      }
+
+      .hero__img {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        object-position: center center;
+      }
+
+      .hero::after {
+        display: none; /* sem gradiente no desktop */
+      }
+
+      .hero__content {
+        position: relative;
+        inset: auto;
+        background: var(--cream);
+        padding: 4rem 3.5rem;
+        align-items: flex-start;
+        text-align: left;
+        justify-content: center;
+      }
+
+      .hero__eyebrow { color: var(--gold); }
+      .hero__names { color: var(--ink); }
+      .hero__amp { color: var(--mid); }
+      .hero__phrase { color: var(--mid); max-width: 380px; }
+      .btn-upload { max-width: 260px; }
+
+      /* galeria grid no desktop */
+      .gallery-scroll {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        overflow-x: visible;
+        padding: 0 3rem;
+        gap: 12px;
+      }
+
+      .gallery-card {
+        flex: none;
+        max-width: none;
+        width: 100%;
+        aspect-ratio: 2/3;
+        scroll-snap-align: unset;
+      }
+
+      .gallery-dots { display: none; }
+
+      .cta__headline { max-width: 500px; }
+      .cta__sub { max-width: 480px; }
+      .btn-outline { max-width: 280px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fade { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HERO ══ -->
+  <section class="hero">
+    <img class="hero__img" src="foto1.png" alt="Isabela e Rian" fetchpriority="high" />
+    <div class="hero__content">
+      <p class="hero__eyebrow fade">Casamento</p>
+      <h1 class="hero__names fade">
+        <em>Isabela</em>
+        <span class="hero__amp">&amp;</span>
+        Rian
+      </h1>
+      <div class="hero__line fade"></div>
+      <p class="hero__phrase fade">
+        Cada sorriso, cada abraço —<br/>
+        ajude a guardar esta memória para sempre.
+      </p>
+      <a
+        href="https://drive.google.com/drive/folders/1sRU_32S-ZmxHYhEMOXJa9-4UrY4x1JsU?usp=sharing"
+        target="_blank" rel="noopener"
+        class="btn-upload fade"
+      >
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12m0-12L8 8m4-4l4 4"/>
+        </svg>
+        Enviar minhas fotos
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ GALERIA ══ -->
+  <section class="gallery-section">
+    <p class="section-label fade">Nossa história</p>
+    <div class="gallery-scroll" id="gallery">
+      <div class="gallery-card"><img src="foto2.png" alt="Isabela e Rian" loading="lazy" /></div>
+      <div class="gallery-card"><img src="foto3.png" alt="Isabela e Rian" loading="lazy" /></div>
+      <div class="gallery-card"><img src="foto4.png" alt="Isabela e Rian" loading="lazy" /></div>
+      <div class="gallery-card"><img src="foto5.png" alt="Isabela e Rian" loading="lazy" /></div>
+      <div class="gallery-card"><img src="foto6.png" alt="Isabela e Rian" loading="lazy" /></div>
+      <div class="gallery-card"><img src="foto7.png" alt="Isabela e Rian" loading="lazy" /></div>
+    </div>
+    <div class="gallery-dots" id="dots">
+      <div class="dot active"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </section>
+
+  <!-- ══ CTA ══ -->
+  <section class="cta-section">
+    <p class="section-label fade">Faça parte</p>
+    <h2 class="cta__headline fade">
+      Você também fez parte deste dia especial
+    </h2>
+    <p class="cta__sub fade">
+      Esperamos que tenha aproveitado cada momento desta celebração.
+      Agora chegou o seu momento — anexe aqui as fotos que você tirou
+      do nosso casamento e ajude a construir esta memória conosco.
+    </p>
+    <a
+      href="https://drive.google.com/drive/folders/1sRU_32S-ZmxHYhEMOXJa9-4UrY4x1JsU?usp=sharing"
+      target="_blank" rel="noopener"
+      class="btn-outline fade"
+    >
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 4v12m0-12L8 8m4-4l4 4"/>
+      </svg>
+      Compartilhar minhas fotos
+    </a>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    com amor — <em>Isabela &amp; Rian</em>
+  </footer>
+
+  <script>
+    // Fade-in ao entrar na tela
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('in'), i * 90);
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade').forEach(el => io.observe(el));
+
+    // Dots da galeria (mobile)
+    const gallery = document.getElementById('gallery');
+    const dots    = document.querySelectorAll('.dot');
+    if (gallery && dots.length) {
+      gallery.addEventListener('scroll', () => {
+        const cards = gallery.querySelectorAll('.gallery-card');
+        const scrollLeft = gallery.scrollLeft;
+        const cardW = cards[0]?.offsetWidth + 10; // gap
+        const idx = Math.round(scrollLeft / cardW);
+        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+      }, { passive: true });
+    }
+  </script>
+</body>
+</html>
